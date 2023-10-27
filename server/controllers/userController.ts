@@ -7,7 +7,7 @@ import jwt, { Secret } from 'jsonwebtoken';
 import sendEmail from '../uitils/sendEmail';
 import { createCokies } from '../uitils/session';
 import { redis } from '../db/redis';
-import { getUserById } from '../services/userService';
+import { getAllUsersService, getUserById } from '../services/userService';
 import bcrypt from 'bcryptjs';
 import cloudinary from 'cloudinary'
 import userModel from '../models/userModel';
@@ -213,8 +213,7 @@ export const updatePassword = bigPromise(async (req: Request, res: Response, nex
 
 export const getAllUsers = bigPromise(async (req: Request, res: Response, next: NextFunction) => {
     try {
-        let users = await userModel.find().sort({ createdAt: -1 });
-        res.status(200).json({ success: true, users: users });
+        getAllUsersService(res);
     } catch (error: any) {
         return next(new ErrorHandler(error.message, error.code));
     }

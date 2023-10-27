@@ -2,7 +2,7 @@ import { Response, Request, NextFunction } from "express";
 import { bigPromise } from "../uitils/bigPromise";
 import ErrorHandler from "../uitils/errorHandler";
 import cloudinary from 'cloudinary';
-import { createCourse } from "../services/courseService";
+import { createCourse, getAllCoursesService } from "../services/courseService";
 import courseModel from "../models/courseModel";
 import { redis } from "../db/redis";
 import mongoose from "mongoose";
@@ -217,6 +217,14 @@ export const addReviewReply = bigPromise(async (req: Request, res: Response, nex
         }
         await course.save();
         res.status(200).json({ success: true, course })
+    } catch (error: any) {
+        return next(new ErrorHandler(error.message, error.code));
+    }
+});
+
+export const getAllCourses = bigPromise(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        getAllCoursesService(res);
     } catch (error: any) {
         return next(new ErrorHandler(error.message, error.code));
     }

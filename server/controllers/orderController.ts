@@ -6,7 +6,7 @@ import courseModel from '../models/courseModel';
 import sendEmail from '../uitils/sendEmail';
 import notificationModel from '../models/notificationModel';
 import userModel from '../models/userModel';
-import { newOrder } from '../services/orderService';
+import { getAllOrdersService, newOrder } from '../services/orderService';
 
 export const createOrder = bigPromise(async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -42,6 +42,14 @@ export const createOrder = bigPromise(async (req: Request, res: Response, next: 
         await course.save();
         const data: any = { courseId: course._id, userId: user!._id, payment_info }
         newOrder(data, res, next);
+    } catch (error: any) {
+        return next(new ErrorHandler(error.message, error.code));
+    }
+});
+
+export const getAllOrders = bigPromise(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        getAllOrdersService(res);
     } catch (error: any) {
         return next(new ErrorHandler(error.message, error.code));
     }

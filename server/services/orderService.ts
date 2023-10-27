@@ -9,3 +9,8 @@ export const newOrder = bigPromise(async (data: any, res: Response, next: NextFu
     res.status(200).json({ success: true, order })
     // next(order);
 });
+
+export const getAllOrdersService = async (res: Response) => {
+    let orders = await orderModel.find().sort({ createdAt: -1 });
+    res.status(200).json({ success: true, orders: orders });
+}

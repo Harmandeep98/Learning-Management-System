@@ -13,3 +13,8 @@ export const createCourse = bigPromise(async (data: any, res: Response, next: Ne
         return next(new ErrorHandler(error.message, 400));
     }
 });
+
+export const getAllCoursesService = async (res: Response) => {
+    let courses = await courseModel.find().sort({ createdAt: -1 });
+    res.status(200).json({ success: true, courses: courses });
+}
